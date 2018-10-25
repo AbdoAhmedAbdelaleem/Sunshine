@@ -49,11 +49,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ForcastRecyclerViewAdapter.OnRecyclerViewItemClicked  {
+public class MainActivity extends AppCompatActivity implements ForcastRecyclerViewAdapter.OnRecyclerViewItemClicked, LoaderManager.LoaderCallbacks<String[]> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    public static final int SEARCH_WEATHER_LOADER=100;
-    public static final String LOCATION_KEY="PREFERED_LOCATION";
+    public static final int SEARCH_WEATHER_LOADER = 100;
+    public static final String LOCATION_KEY = "PREFERED_LOCATION";
     public static String sunshinePreferenceLocation;
     TextView textViewDataError;
     ProgressBar progressBar;
@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclerVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
-       dataSource = new ArrayList<>();
-        sunshinePreferenceLocation=SunshinePreferences.getPreferredWeatherLocation(this);
+        dataSource = new ArrayList<>();
+        sunshinePreferenceLocation = SunshinePreferences.getPreferredWeatherLocation(this);
         adapter = new ForcastRecyclerViewAdapter(this, dataSource, this);
         layoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
@@ -75,7 +75,14 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclerVi
         recyclerView.setLayoutManager(layoutManager);
         textViewDataError = (TextView) findViewById(R.id.tv_weather_data_error);
         progressBar = (ProgressBar) findViewById(R.id.progreesBar);
-         LoadWeatherData(MainActivity.this);
+        LoadWeatherData(MainActivity.this);
+        android.support.v4.app.LoaderManager loaderManager = getSupportLoaderManager();
+        Bundle bundle = new Bundle();
+        bundle.putString(LOCATION_KEY, sunshinePreferenceLocation);
+        if (loaderManager.getLoader(SEARCH_WEATHER_LOADER) != null)
+            loaderManager.initLoader(SEARCH_WEATHER_LOADER, bundle, this);
+        else
+            loaderManager.restartLoader(SEARCH_WEATHER_LOADER, bundle, this);
     }
 
     @Override
@@ -83,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclerVi
         getMenuInflater().inflate(R.menu.forcast, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.RefreshButton) {
@@ -91,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclerVi
         } else
             return super.onOptionsItemSelected(item);
     }
+
     public void DisplayError() {
         textViewDataError.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
@@ -104,15 +113,90 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclerVi
     }
 
     private void LoadWeatherData(Context context) {
-        new FetcherWeatherTask().execute(SunshinePreferences.getPreferredWeatherLocation(context));
+        // new FetcherWeatherTask().execute(SunshinePreferences.getPreferredWeatherLocation(context));
     }
 
     @Override
     public void OnRecyclerViewItemClicked(int position) {
-        String currentData=dataSource.get(position);
-        Intent intent=new Intent(MainActivity.this,DetailActivity.class);
-        intent.putExtra(DetailActivity.EXTRA_TEXT,currentData);
+        String currentData = dataSource.get(position);
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        intent.putExtra(DetailActivity.EXTRA_TEXT, currentData);
         startActivity(intent);
+    }
+
+    @Override
+    public android.support.v4.content.Loader onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader(this) {
+            String[] weatherData;
+
+            @Override
+            protected void onStartLoading() {
+                super.onStartLoading();
+                if (args.size() <= 0) {
+                    Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                progressBar.setVisibility(View.VISIBLE);
+                if(weatherData!=null)
+                {
+                    deliverResult(weatherData);
+                }
+                else {
+                    forceLoad();
+                }
+            }
+
+            @Override
+            public void deliverResult(Object data)
+            {
+                weatherData= (String[]) data;
+                super.deliverResult(data);
+
+            }
+
+            @Override
+            public String[] loadInBackground() {
+                URL url = null;
+                try {
+                    url = NetworkUtils.buildUrl(args.getString(LOCATION_KEY));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if(url!=null) {
+                        String responseFromHttpUrl = NetworkUtils.getResponseFromHttpUrl(url);
+                        String[] simpleWeatherStringsFromJson = OpenWeatherJsonUtils.getSimpleWeatherStringsFromJson(MainActivity.this, responseFromHttpUrl);
+                        weatherData = simpleWeatherStringsFromJson;
+                        return simpleWeatherStringsFromJson;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(android.support.v4.content.Loader loader, String[] data) {
+        progressBar.setVisibility(View.INVISIBLE);
+        if (data == null) {
+            DisplayError();
+            return;
+        }
+        dataSource = new ArrayList<>();
+        for (String str : data) {
+            dataSource.add(str);
+        }
+        DisplayData();
+
+    }
+
+    @Override
+    public void onLoaderReset(android.support.v4.content.Loader loader) {
+
     }
 
 
@@ -156,9 +240,8 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclerVi
                 DisplayError();
                 return;
             }
-            dataSource=new ArrayList<>();
-            for (String str : s)
-            {
+            dataSource = new ArrayList<>();
+            for (String str : s) {
                 dataSource.add(str);
             }
             DisplayData();
