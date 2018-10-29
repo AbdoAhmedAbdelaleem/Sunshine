@@ -15,7 +15,10 @@
  */
 package com.example.android.sunshine.utilities;
 
+import android.content.Context;
 import android.net.Uri;
+
+import com.example.android.sunshine.data.SunshinePreferences;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,12 +57,12 @@ public final class NetworkUtils {
     /* The number of days we want our API to return */
     private static final int numDays = 14;
 
-    final static String QUERY_PARAM = "q";
-    final static String LAT_PARAM = "lat";
-    final static String LON_PARAM = "lon";
-    final static String FORMAT_PARAM = "mode";
-    final static String UNITS_PARAM = "units";
-    final static String DAYS_PARAM = "cnt";
+  private final static String QUERY_PARAM = "q";
+  private final static String LAT_PARAM = "lat";
+  private final static String LON_PARAM = "lon";
+  private final static String FORMAT_PARAM = "mode";
+  private final static String UNITS_PARAM = "units";
+  private final static String DAYS_PARAM = "cnt";
 
     /**
      * Builds the URL used to talk to the weather server using a location. This location is based
@@ -68,11 +71,14 @@ public final class NetworkUtils {
      * @param locationQuery The location that will be queried for.
      * @return The URL to use to query the weather server.
      */
-    public static URL buildUrl(String locationQuery) throws MalformedURLException {
+    public static URL buildUrl(String locationQuery, Context context) throws MalformedURLException {
         /** This will be implemented in a future lesson **/
+        String unit="metric";
+        if(!SunshinePreferences.isMetric(context))
+            unit ="imperial";
         Uri uri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                 .appendQueryParameter(QUERY_PARAM, locationQuery)
-                .appendQueryParameter(UNITS_PARAM, units)
+                .appendQueryParameter(UNITS_PARAM, unit)
                 .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
                 .appendQueryParameter(FORMAT_PARAM, format).build();
         return new URL(uri.toString());

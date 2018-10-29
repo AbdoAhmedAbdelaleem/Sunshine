@@ -16,6 +16,10 @@
 package com.example.android.sunshine.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.example.android.sunshine.R;
 
 public class SunshinePreferences {
 
@@ -88,7 +92,8 @@ public class SunshinePreferences {
      */
     public static String getPreferredWeatherLocation(Context context) {
         /** This will be implemented in a future lesson **/
-        return getDefaultWeatherLocation();
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+       return defaultSharedPreferences.getString(context.getString(R.string.LocationPreferenceKey),getDefaultWeatherLocation());
     }
 
     /**
@@ -99,7 +104,9 @@ public class SunshinePreferences {
      */
     public static boolean isMetric(Context context) {
         /** This will be implemented in a future lesson **/
-        return true;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String s = sharedPreferences.getString(context.getString(R.string.unitListKey), "");
+        return s.equals(context.getString(R.string.unitCelsiusLabel));
     }
 
     /**
