@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
     ForcastRecyclerViewAdapter adapter;
     ArrayList<String> dataSource;
     android.support.v4.app.LoaderManager loaderManager;
-
+    private static boolean PREFERENCES_HAVE_BEEN_UPDATED = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +82,18 @@ public class MainActivity extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.progreesBar);
         loaderManager = getSupportLoaderManager();
         LoadWeatherData(MainActivity.this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(PREFERENCES_HAVE_BEEN_UPDATED) {
+            Bundle bundle = new Bundle();
+            String location = SunshinePreferences.getPreferredWeatherLocation(this);
+            bundle.putString(LOCATION_KEY, location);
+                loaderManager.restartLoader(SEARCH_WEATHER_LOADER, bundle, this);
+        }
+        PREFERENCES_HAVE_BEEN_UPDATED=false;
     }
 
     @Override
@@ -219,7 +231,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        PREFERENCES_HAVE_BEEN_UPDATED=true;
         LoadWeatherData(this);
+
     }
 
 
