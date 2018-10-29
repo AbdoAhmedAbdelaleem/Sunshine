@@ -6,4 +6,8 @@
     app:showAsAction="ifRoom"
     android:id="@+id/RefreshButton"
     />
+    <item
+        android:id="@+id/SettingItem"
+        android:title="@string/SettingButton"
+        android:orderInCategory="100"/>
 </menu>

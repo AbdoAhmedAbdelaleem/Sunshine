@@ -93,11 +93,21 @@ public class MainActivity extends AppCompatActivity implements ForcastRecyclerVi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.RefreshButton) {
-            LoadWeatherData(MainActivity.this);
-            return true;
-        } else
-            return super.onOptionsItemSelected(item);
+        switch (item.getItemId())
+        {
+            case R.id.RefreshButton:
+                LoadWeatherData(MainActivity.this);
+                return true;
+            case R.id.SettingItem:
+              Intent intent=new Intent(this,SettingActivity.class);
+              startActivity(intent);
+                return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+
+        }
+
+
     }
 
     public void DisplayError() {

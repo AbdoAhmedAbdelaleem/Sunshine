@@ -5,4 +5,9 @@
     app:showAsAction="ifRoom"
     android:orderInCategory="1"
     android:title="Share"/>
+    <item
+        android:id="@+id/SettingItem"
+        android:title="@string/SettingButton"
+        android:orderInCategory="100"/>
+
 </menu>

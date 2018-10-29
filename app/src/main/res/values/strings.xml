@@ -125,7 +125,17 @@
 
     <string name="condition_unknown">Unknown (<xliff:g id="conditionId">%1$d</xliff:g>)</string>
     <string name="RefreshButton">Refresh</string>
+    <string name="SettingButton">Setting</string>
     <string name="errorMessage">Error while Displaying this Page</string>
+    <string name="LocationPreferenceKey" translatable="false">LocationPreferenceKey</string>
+    <string name="LocationPreferenceTitle">Location</string>
+    <string name="LocationPreferenceDefault">1600 Amphitheatre Parkway, Mountain View, CA 94043</string>
+    <string name="unitCelsiusKey">celsius</string>
+    <string name="unitFahrenheitKey">fahrenheit</string>
+    <string name="unitCelsiusLabel">Celsius</string>
+    <string name="unitFahrenheitLabel">Fahrenheit</string>
+    <string name="unitListTitlt">Units</string>
+    <string name="unitListKey" translatable="false">unitListKey</string>
     <!-- - - - - - - - - - - -->
     <!-- Used by NetworkUtils-->
     <!-- - - - - - - - - - - -->

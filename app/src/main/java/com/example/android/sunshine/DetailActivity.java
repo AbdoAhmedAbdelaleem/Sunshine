@@ -33,11 +33,20 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.shareItem) {
-            ShareData();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.shareItem:
+                ShareData();
+                return true;
+            case R.id.SettingItem:
+                Intent intent=new Intent(this,SettingActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
-        return super.onOptionsItemSelected(item);
+
+
     }
 
     private void ShareData() {
