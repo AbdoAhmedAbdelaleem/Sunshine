@@ -8,7 +8,7 @@ import com.example.android.sunshine.data.SunshineContract.WeatherEntry;
 
 public class SunshineDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Weather.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public SunshineDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -19,20 +19,20 @@ public class SunshineDbHelper extends SQLiteOpenHelper {
         String weatherEntryCreationString = "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +
                 WeatherEntry.COLUMN_WEATHER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
-                WeatherEntry.COLUMN_DATE + " INTEGER, " +
+                WeatherEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
 
-                WeatherEntry.COLUMN_WEATHER_ID + " INTEGER, " +
+                WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL, " +
 
-                WeatherEntry.COLUMN_MIN_TEMP + " REAL, " +
+                WeatherEntry.COLUMN_MIN_TEMP + " REAL NOT NULL, " +
 
-                WeatherEntry.COLUMN_MAX_TEMP + " REAL, " +
+                WeatherEntry.COLUMN_MAX_TEMP + " REAL NOT NULL, " +
 
-                WeatherEntry.COLUMN_HUMIDITY + " REAL, " +
+                WeatherEntry.COLUMN_HUMIDITY + " REAL NOT NULL, " +
 
-                WeatherEntry.COLUMN_PRESSURE + " REAL, " +
+                WeatherEntry.COLUMN_PRESSURE + " REAL NOT NULL, " +
 
-                WeatherEntry.COLUMN_WIND_SPEED + " REAL, " +
-                WeatherEntry.COLUMN_DEGREES + " REAL );";
+                WeatherEntry.COLUMN_WIND_SPEED + " REAL NOT NULL, " +
+                WeatherEntry.COLUMN_DEGREES + " REAL NOT NULL );";
 
         sqLiteDatabase.execSQL(weatherEntryCreationString);
 
