@@ -79,7 +79,19 @@ public class WeatherProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        int match = sUriMatcher.match(uri);
+        int numOfRowsDeleted=0;
+        switch (match)
+        {
+            case WEATHER:
+               numOfRowsDeleted= database.delete(SunshineContract.WeatherEntry.TABLE_NAME,s,strings);
+                break;
+                default:
+                    throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        return numOfRowsDeleted;
     }
 
     @Override
