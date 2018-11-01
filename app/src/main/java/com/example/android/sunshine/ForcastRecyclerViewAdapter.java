@@ -80,6 +80,7 @@ public class ForcastRecyclerViewAdapter extends RecyclerView.Adapter<ForcastRecy
               String highAndLowTemperature = SunshineWeatherUtils.formatHighLows(context, maxTemp, minTemp);
               String weatherSummary=dateString+" - "+description+" - "+highAndLowTemperature;
               textView.setText(weatherSummary);
+              this.itemView.setTag(dateMillis);
           }
             itemView.setOnClickListener(this);
         }
@@ -88,11 +89,11 @@ public class ForcastRecyclerViewAdapter extends RecyclerView.Adapter<ForcastRecy
 
         @Override
         public void onClick(View view) {
-            onRecyclerViewItemClicked.OnRecyclerViewItemClicked(textView.getText().toString());
+            onRecyclerViewItemClicked.OnRecyclerViewItemClicked((long) itemView.getTag());
         }
     }
 
     interface OnRecyclerViewItemClicked {
-        public void OnRecyclerViewItemClicked(String itemText);
+        public void OnRecyclerViewItemClicked(long date);
     }
 }

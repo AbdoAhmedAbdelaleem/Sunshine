@@ -17,26 +17,19 @@ package com.example.android.sunshine;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.drm.DrmStore;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.ShareCompat;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,14 +39,12 @@ import com.example.android.sunshine.data.SunshineFakeDateByUdacity;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.NetworkUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
-import com.example.android.sunshine.utilities.SunshineDateUtils;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements ForcastRecyclerViewAdapter.OnRecyclerViewItemClicked, LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -156,9 +147,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void OnRecyclerViewItemClicked(String itemText) {
+    public void OnRecyclerViewItemClicked(long date) {
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra(DetailActivity.EXTRA_TEXT, itemText);
+        intent.putExtra(DetailActivity.WEATHER_ID_INTENT, date);
         startActivity(intent);
     }
 
