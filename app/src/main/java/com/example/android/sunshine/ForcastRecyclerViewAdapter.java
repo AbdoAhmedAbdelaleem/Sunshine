@@ -51,6 +51,8 @@ public class ForcastRecyclerViewAdapter extends RecyclerView.Adapter<ForcastRecy
 
     @Override
     public int getItemCount() {
+        if(dataSource==null)
+            return 0;
         return dataSource.getCount();
     }
 
