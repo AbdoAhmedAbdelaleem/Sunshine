@@ -7,7 +7,7 @@ public class SunshineContract
 {
     public static final String AUTHORITY="com.example.android.sunshine";
     public static final String WEATHER_PATH="WEATHER";
-    public static final Uri BASE_WEATHER_URI= Uri.parse("conten://"+AUTHORITY);
+    public static final Uri BASE_WEATHER_URI= Uri.parse("content://"+AUTHORITY);
 
     public static class WeatherEntry implements BaseColumns {
 

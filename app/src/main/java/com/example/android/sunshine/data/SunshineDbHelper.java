@@ -17,7 +17,7 @@ public class SunshineDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String weatherEntryCreationString = "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +
-                WeatherEntry.COLUMN_WEATHER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                WeatherEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
                 WeatherEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
 

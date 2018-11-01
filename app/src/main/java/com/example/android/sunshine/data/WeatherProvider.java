@@ -6,6 +6,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import com.example.android.sunshine.data.SunshineContract.*;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -32,8 +33,27 @@ public class WeatherProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        return null;
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortedBy) {
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+        int match = sUriMatcher.match(uri);
+        Cursor cursor=null;
+        switch (match)
+        {
+            case WEATHER:
+              cursor=  database.query(SunshineContract.WeatherEntry.TABLE_NAME,projection,selection,selectionArgs,null,null,sortedBy);
+
+                break;
+            case WEATHER_WITH_ID:
+                String dateParameter=uri.getLastPathSegment();
+                selectionArgs=new String[]{dateParameter};
+               cursor= database.query(SunshineContract.WeatherEntry.TABLE_NAME,projection,WeatherEntry.COLUMN_DATE+"=?",selectionArgs,null,null,sortedBy);
+
+                break;
+                default:
+                    throw new UnsupportedOperationException("this Uri not supported");
+        }
+        cursor.setNotificationUri(getContext().getContentResolver(),uri);
+        return cursor;
     }
 
     @Override
@@ -47,7 +67,7 @@ public class WeatherProvider extends ContentProvider {
                 try {
                     for (ContentValues value : values) {
                         Long date = value.getAsLong(SunshineContract.WeatherEntry.COLUMN_DATE);
-                        if (SunshineDateUtils.isDateNormalized(date)) {
+                        if (!SunshineDateUtils.isDateNormalized(date)) {
                             throw new IllegalArgumentException("Date must be normalized");
                         }
                         long l = database.insert(SunshineContract.WeatherEntry.TABLE_NAME, null, value);
