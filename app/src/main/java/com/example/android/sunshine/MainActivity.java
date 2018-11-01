@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.drm.DrmStore;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -27,6 +28,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -39,6 +41,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.sunshine.data.SunshineContract;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.NetworkUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
@@ -52,7 +55,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements ForcastRecyclerViewAdapter.OnRecyclerViewItemClicked, LoaderManager.LoaderCallbacks<String[]>, SharedPreferences.OnSharedPreferenceChangeListener {
+        implements ForcastRecyclerViewAdapter.OnRecyclerViewItemClicked, LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final int SEARCH_WEATHER_LOADER = 100;
@@ -63,17 +66,17 @@ public class MainActivity extends AppCompatActivity
     LinearLayoutManager layoutManager;
     RecyclerView recyclerView;
     ForcastRecyclerViewAdapter adapter;
-    ArrayList<String> dataSource;
+    Cursor dataSource;
     android.support.v4.app.LoaderManager loaderManager;
     private static boolean PREFERENCES_HAVE_BEEN_UPDATED = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
-        dataSource = new ArrayList<>();
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        adapter = new ForcastRecyclerViewAdapter(this, dataSource, this);
+        adapter = new ForcastRecyclerViewAdapter(this, null, this);
         layoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setAdapter(adapter);
@@ -87,13 +90,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if(PREFERENCES_HAVE_BEEN_UPDATED) {
+        if (PREFERENCES_HAVE_BEEN_UPDATED) {
             Bundle bundle = new Bundle();
             String location = SunshinePreferences.getPreferredWeatherLocation(this);
             bundle.putString(LOCATION_KEY, location);
-                loaderManager.restartLoader(SEARCH_WEATHER_LOADER, bundle, this);
+            loaderManager.restartLoader(SEARCH_WEATHER_LOADER, bundle, this);
         }
-        PREFERENCES_HAVE_BEEN_UPDATED=false;
+        PREFERENCES_HAVE_BEEN_UPDATED = false;
     }
 
     @Override
@@ -150,88 +153,38 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void OnRecyclerViewItemClicked(int position) {
-        String currentData = dataSource.get(position);
+    public void OnRecyclerViewItemClicked(String itemText) {
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra(DetailActivity.EXTRA_TEXT, currentData);
+        intent.putExtra(DetailActivity.EXTRA_TEXT, itemText);
         startActivity(intent);
     }
 
     @Override
     public android.support.v4.content.Loader onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader(this) {
-            String[] weatherData;
-
-            @Override
-            protected void onStartLoading() {
-                super.onStartLoading();
-                if (args.size() <= 0) {
-                    Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                progressBar.setVisibility(View.VISIBLE);
-                if (weatherData != null) {
-                    deliverResult(weatherData);
-                } else {
-                    forceLoad();
-                }
-            }
-
-            @Override
-            public void deliverResult(Object data) {
-                weatherData = (String[]) data;
-                super.deliverResult(data);
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public String[] loadInBackground() {
-                URL url = null;
-                try {
-                    url = NetworkUtils.buildUrl(args.getString(LOCATION_KEY), MainActivity.this);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    if (url != null) {
-                        String responseFromHttpUrl = NetworkUtils.getResponseFromHttpUrl(url);
-                        String[] simpleWeatherStringsFromJson = OpenWeatherJsonUtils.getSimpleWeatherStringsFromJson(MainActivity.this, responseFromHttpUrl);
-                        weatherData = simpleWeatherStringsFromJson;
-                        return simpleWeatherStringsFromJson;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        };
+        return new CursorLoader(this, SunshineContract.WeatherEntry.CONTENT_URI,null,null,null,SunshineContract.WeatherEntry.COLUMN_DATE);
     }
 
     @Override
-    public void onLoadFinished(android.support.v4.content.Loader loader, String[] data) {
+    public void onLoadFinished(android.support.v4.content.Loader loader, Cursor data) {
         progressBar.setVisibility(View.INVISIBLE);
         if (data == null) {
             DisplayError();
             return;
         }
-        dataSource = new ArrayList<>();
-        for (String str : data) {
-            dataSource.add(str);
-        }
-        DisplayData();
-
+        dataSource = data;
+        adapter.SwapCursor(data);
+        if (data.getCount() > 0)
+            DisplayData();
     }
 
     @Override
     public void onLoaderReset(android.support.v4.content.Loader loader) {
-    loader.reset();
+        adapter.SwapCursor(null);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        PREFERENCES_HAVE_BEEN_UPDATED=true;
+        PREFERENCES_HAVE_BEEN_UPDATED = true;
         LoadWeatherData(this);
 
     }
@@ -276,10 +229,6 @@ public class MainActivity extends AppCompatActivity
             if (s == null) {
                 DisplayError();
                 return;
-            }
-            dataSource = new ArrayList<>();
-            for (String str : s) {
-                dataSource.add(str);
             }
             DisplayData();
 
