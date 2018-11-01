@@ -42,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.sunshine.data.SunshineContract;
+import com.example.android.sunshine.data.SunshineFakeDateByUdacity;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.NetworkUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
+        getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI,null,null);
+        SunshineFakeDateByUdacity.insertFakeData(this);
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         adapter = new ForcastRecyclerViewAdapter(this, null, this);
