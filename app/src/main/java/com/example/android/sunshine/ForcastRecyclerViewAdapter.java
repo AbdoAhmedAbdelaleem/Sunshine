@@ -36,10 +36,12 @@ public class ForcastRecyclerViewAdapter extends RecyclerView.Adapter<ForcastRecy
             if (dataSource != null)
                 dataSource.close();
             dataSource = cursor;
+            notifyDataSetChanged();
         }
     }
     public void SetDataSource(Cursor dataSource) {
         this.dataSource = dataSource;
+        notifyDataSetChanged();
     }
 
     @Override
