@@ -20,6 +20,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.example.android.sunshine.R;
+import com.example.android.sunshine.utilities.NetworkUtils;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class SunshinePreferences {
 

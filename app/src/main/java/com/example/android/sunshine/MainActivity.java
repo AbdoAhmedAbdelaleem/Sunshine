@@ -34,6 +34,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.sunshine.Sync.SunshineSyncUtils;
 import com.example.android.sunshine.data.SunshineContract;
 import com.example.android.sunshine.data.SunshineFakeDateByUdacity;
 import com.example.android.sunshine.data.SunshinePreferences;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
-        getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI,null,null);
+        getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI, null, null);
         SunshineFakeDateByUdacity.insertFakeData(this);
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.progreesBar);
         loaderManager = getSupportLoaderManager();
         LoadWeatherData(MainActivity.this);
+        getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI,null,null);
+        SunshineSyncUtils.initialize(this);
     }
 
     @Override
@@ -155,7 +158,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public android.support.v4.content.Loader onCreateLoader(int id, final Bundle args) {
-        return new CursorLoader(this, SunshineContract.WeatherEntry.CONTENT_URI,null,null,null,SunshineContract.WeatherEntry.COLUMN_DATE);
+        return new CursorLoader(this, SunshineContract.WeatherEntry.CONTENT_URI, null, null, null, SunshineContract.WeatherEntry.COLUMN_DATE);
     }
 
     @Override

@@ -8,6 +8,9 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
+import com.example.android.sunshine.Sync.SunshineSyncUtils;
+import com.example.android.sunshine.utilities.SunshineWeatherUtils;
+
 public class SettingFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     SharedPreferences screenSharedPreferences;
     PreferenceScreen preferenceScreen;
@@ -46,5 +49,6 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
         setSummary(preference);
+        SunshineSyncUtils.StartImmediateSync(getContext());
     }
 }

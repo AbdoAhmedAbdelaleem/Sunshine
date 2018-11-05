@@ -83,7 +83,10 @@ public final class NetworkUtils {
                 .appendQueryParameter(FORMAT_PARAM, format).build();
         return new URL(uri.toString());
     }
-
+    public static URL getUrl(Context context) throws MalformedURLException {
+        String locationQuery = SunshinePreferences.getPreferredWeatherLocation(context);
+        return NetworkUtils.buildUrl(locationQuery, context);
+    }
     /**
      * Builds the URL used to talk to the weather server using latitude and longitude of a
      * location.
