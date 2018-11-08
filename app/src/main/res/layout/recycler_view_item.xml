@@ -1,12 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/id_item_textView"
-    android:textSize="25sp"
-    android:paddingBottom="20dp"
-    />
-</LinearLayout>
+<!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/id_item_textView"-->
+    <!--android:textSize="25sp"-->
+
+    <!--android:paddingBottom="20dp"-->
+    <!--/>-->
+    <ImageView
+        android:id="@+id/imageViewWeatherImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/art_clear" />
+
+    <TextView
+        android:id="@+id/textViewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:text="Today December 20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageViewWeatherImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.195" />
+
+    <TextView
+        android:id="@+id/textViewDecription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:text="Rainy"
+        app:layout_constraintStart_toEndOf="@+id/imageViewWeatherImage"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
+
+    <TextView
+        android:id="@+id/textViewHighTemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:text="19\u00b0"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewLowTemperature"
+        app:layout_constraintEnd_toStartOf="@+id/textViewLowTemperature"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textViewLowTemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="10\u00b0"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</android.support.constraint.ConstraintLayout>
