@@ -40,6 +40,11 @@
             android:name=".data.WeatherProvider"/>
         <service android:name=".Sync.SunshineIntentService"
             android:exported="false"/>
+        <service android:name=".Sync.SunshineFirebaseJobService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

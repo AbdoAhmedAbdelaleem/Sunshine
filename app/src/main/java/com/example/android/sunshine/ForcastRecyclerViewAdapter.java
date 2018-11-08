@@ -65,7 +65,7 @@ public class ForcastRecyclerViewAdapter extends RecyclerView.Adapter<ForcastRecy
         }
 
         public void OnBind(int position) {
-          if(dataSource.moveToPosition(position))
+          if( dataSource.moveToPosition(position))
           {
               int columnDateIndex= dataSource.getColumnIndex(WeatherEntry.COLUMN_DATE);
               int columnWeatherIDIndex= dataSource.getColumnIndex(WeatherEntry.COLUMN_WEATHER_ID);

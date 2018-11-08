@@ -97,7 +97,7 @@ public class SunshinePreferences {
     public static String getPreferredWeatherLocation(Context context) {
         /** This will be implemented in a future lesson **/
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-       return defaultSharedPreferences.getString(context.getString(R.string.LocationPreferenceKey),getDefaultWeatherLocation());
+        return defaultSharedPreferences.getString(context.getString(R.string.LocationPreferenceKey), getDefaultWeatherLocation());
     }
 
     /**
@@ -135,6 +135,28 @@ public class SunshinePreferences {
     public static boolean isLocationLatLonAvailable(Context context) {
         /** This will be implemented in a future lesson **/
         return false;
+    }
+
+    public static long getLastNotificationTime(Context context) {
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastNotificationKey = context.getString(R.string.pref_last_notification);
+        long lastNotificationTime = defaultSharedPreferences.getLong(lastNotificationKey, 0);
+        return lastNotificationTime;
+    }
+    public static long getEllapsedTimeSinceLastNotification(Context context) {
+        long todayInMillis = System.currentTimeMillis();
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastNotificationKey = context.getString(R.string.pref_last_notification);
+        long lastNotificationTime = defaultSharedPreferences.getLong(lastNotificationKey, 0);
+        return todayInMillis- lastNotificationTime;
+    }
+    public static void saveLastTime(Context context) {
+        long timeInMillis=System.currentTimeMillis();
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = defaultSharedPreferences.edit();
+        String lastNotificationKey = context.getString(R.string.pref_last_notification);
+        editor.putLong(lastNotificationKey, timeInMillis);
+        editor.apply();
     }
 
     private static String getDefaultWeatherLocation() {

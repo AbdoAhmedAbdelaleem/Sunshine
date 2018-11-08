@@ -2,11 +2,16 @@ package com.example.android.sunshine.Sync;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.widget.Toast;
 
 import com.example.android.sunshine.MainActivity;
+import com.example.android.sunshine.R;
 import com.example.android.sunshine.data.SunshineContract;
+import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.NetworkUtils;
+import com.example.android.sunshine.utilities.NotificationUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
 
 import org.json.JSONException;
@@ -33,6 +38,20 @@ public class SunshineSyncTask
                  context.getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI,null,null);
                 context.getContentResolver().bulkInsert(SunshineContract.WeatherEntry.CONTENT_URI,data);
              }
+
+            long timeSinceLastNotification = SunshinePreferences
+                    .getEllapsedTimeSinceLastNotification(context);
+
+            boolean oneDayPassedSinceLastNotification = false;
+            if (timeSinceLastNotification >= DateUtils.DAY_IN_MILLIS) {
+                oneDayPassedSinceLastNotification = true;
+            }
+          boolean notificationsEnabled= PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+                  context.getString(R.string.pref_enable_notifications_key),true);
+           // if (notificationsEnabled && oneDayPassedSinceLastNotification)
+            {
+                NotificationUtils.NotifyUserTodayaData(context);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

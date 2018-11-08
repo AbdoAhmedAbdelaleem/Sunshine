@@ -39,6 +39,7 @@ import com.example.android.sunshine.data.SunshineContract;
 import com.example.android.sunshine.data.SunshineFakeDateByUdacity;
 import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.utilities.NetworkUtils;
+import com.example.android.sunshine.utilities.NotificationUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
 
 import org.json.JSONException;
@@ -67,8 +68,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forecast);
-        getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI, null, null);
-        SunshineFakeDateByUdacity.insertFakeData(this);
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         adapter = new ForcastRecyclerViewAdapter(this, null, this);
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.progreesBar);
         loaderManager = getSupportLoaderManager();
         LoadWeatherData(MainActivity.this);
-        getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI,null,null);
+        //getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI,null,null);
         SunshineSyncUtils.initialize(this);
     }
 
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity
     public void DisplayData() {
         recyclerView.setVisibility(View.VISIBLE);
         textViewDataError.setVisibility(View.INVISIBLE);
-        adapter.SetDataSource(dataSource);
+        //adapter.SetDataSource(dataSource);
         recyclerView.setAdapter(adapter);
     }
 
@@ -182,8 +181,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         PREFERENCES_HAVE_BEEN_UPDATED = true;
-        LoadWeatherData(this);
+       // LoadWeatherData(this);
 
+    }
+
+    public void ShowNotification(View view) {
+        NotificationUtils.NotifyUserTodayaData(this);
     }
 
 

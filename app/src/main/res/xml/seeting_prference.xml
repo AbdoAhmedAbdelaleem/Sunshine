@@ -12,4 +12,10 @@ android:key="@string/unitListKey"
         android:entries="@array/unitsKeys"
         android:defaultValue="@string/unitCelsiusLabel"
         />
+    <CheckBoxPreference
+        android:title="Display Notification"
+        android:summaryOff="No"
+        android:summaryOn="Yes"
+        android:key="@string/pref_enable_notifications_key"
+        android:defaultValue="true"/>
 </PreferenceScreen>
