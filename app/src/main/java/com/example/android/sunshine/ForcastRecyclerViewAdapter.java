@@ -11,13 +11,12 @@ import android.widget.TextView;
 
 import com.example.android.sunshine.data.SunshineContract.*;
 
-import com.example.android.sunshine.data.SunshineContract;
 import com.example.android.sunshine.utilities.SunshineDateUtils;
 import com.example.android.sunshine.utilities.SunshineWeatherUtils;
 
-import java.util.ArrayList;
-
 public class ForcastRecyclerViewAdapter extends RecyclerView.Adapter<ForcastRecyclerViewAdapter.ForcastViewHolder> {
+    public static final int TODAY_VIEW_ID=1;
+    public static final int FUTURE_DAYS_VIEW_ID =2;
     OnRecyclerViewItemClicked onRecyclerViewItemClicked;
     Context context;
     Cursor dataSource;
@@ -30,7 +29,17 @@ public class ForcastRecyclerViewAdapter extends RecyclerView.Adapter<ForcastRecy
 
     @Override
     public ForcastViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(this.context).inflate(R.layout.recycler_view_item, parent, false);
+        View view=null;
+        switch (viewType)
+        {
+            case TODAY_VIEW_ID:
+                view = LayoutInflater.from(this.context).inflate(R.layout.list_item_forecast_today, parent, false);
+                break;
+            case FUTURE_DAYS_VIEW_ID:
+                view = LayoutInflater.from(this.context).inflate(R.layout.recycler_view_item, parent, false);
+                break;
+        }
+
         return new ForcastViewHolder(view);
     }
 
@@ -41,6 +50,14 @@ public class ForcastRecyclerViewAdapter extends RecyclerView.Adapter<ForcastRecy
             dataSource = cursor;
             notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        boolean useTodayLayout = context.getResources().getBoolean(R.bool.use_today_layout);
+        if(position== 0 && useTodayLayout)
+            return TODAY_VIEW_ID;
+        return FUTURE_DAYS_VIEW_ID;
     }
 
     public void SetDataSource(Cursor dataSource) {
