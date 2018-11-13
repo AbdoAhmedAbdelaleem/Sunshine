@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="12dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="12dp"
+    android:paddingBottom="@dimen/list_item_padding_vertical"
+    android:paddingLeft="@dimen/list_item_padding_horizontal"
+    android:paddingRight="@dimen/list_item_padding_horizontal"
+    android:background="@drawable/recycler_view_touch_selector"
+    android:paddingTop="@dimen/list_item_padding_vertical"
     >
 <!--<TextView-->
     <!--android:layout_width="match_parent"-->
@@ -19,12 +20,12 @@
     <!--/>-->
     <ImageView
         android:id="@+id/imageViewWeatherImage"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/list_icon"
+        android:layout_height="@dimen/list_icon"
 
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="@dimen/list_item_padding_horizontal"
+        android:layout_marginStart="@dimen/list_item_padding_horizontal"
+        android:layout_marginTop="@dimen/list_item_padding_vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/art_clear" />
@@ -46,18 +47,15 @@
         android:id="@+id/textViewDecription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="4dp"
         android:text="Rainy"
-        app:layout_constraintStart_toEndOf="@+id/imageViewWeatherImage"
+        app:layout_constraintStart_toStartOf="@+id/textViewDate"
         app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
     <TextView
         android:id="@+id/textViewHighTemperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="@dimen/list_item_date_left_margin"
         android:layout_marginRight="12dp"
         android:text="19\u00b0"
         android:textSize="28sp"

@@ -26,7 +26,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:id="@+id/recyclerview"
-      android:visibility="gone"
+      android:clipToPadding="false"
+      android:visibility="visible"
       ></android.support.v7.widget.RecyclerView>
   <TextView
       android:id="@+id/tv_weather_data_error"

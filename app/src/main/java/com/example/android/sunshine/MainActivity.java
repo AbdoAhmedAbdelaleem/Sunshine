@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setElevation(0f);
+
         setContentView(R.layout.activity_forecast);
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         defaultSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -100,19 +102,14 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
         defaultSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.forcast, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.RefreshButton:
-                LoadWeatherData(MainActivity.this);
-                return true;
             case R.id.SettingItem:
                 Intent intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);

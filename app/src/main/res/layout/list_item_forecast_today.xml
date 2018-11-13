@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="16dp"
-    android:paddingTop="16dp"
-    >
+     android:paddingBottom="@dimen/today_forecast_list_item_vertical_padding"
+    android:background="@drawable/today_selector"
+
+    android:paddingTop="@dimen/today_forecast_list_item_vertical_padding">
 
     <TextView
         android:id="@+id/textViewLowTemperature"
@@ -16,8 +16,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-light"
         android:text="10\u00b0"
-        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="@+id/textViewHighTemperature"
         app:layout_constraintStart_toStartOf="@+id/textViewHighTemperature"
         app:layout_constraintTop_toBottomOf="@+id/textViewHighTemperature" />
@@ -29,8 +31,10 @@
         android:layout_marginEnd="28dp"
         android:layout_marginRight="28dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-light"
         android:text="19\u00b0"
-        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:textSize="70sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
@@ -38,9 +42,12 @@
         android:id="@+id/textViewDecription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:text="Broken Clouds"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/imageViewWeatherImage"
+        app:layout_constraintHorizontal_bias="0.277"
         app:layout_constraintStart_toStartOf="@+id/imageViewWeatherImage"
         app:layout_constraintTop_toBottomOf="@+id/imageViewWeatherImage" />
 
@@ -57,6 +64,7 @@
         app:srcCompat="@drawable/art_clear" />
 
     <TextView
+
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,7 +73,10 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:textSize="20sp"
         android:text="Today, December 9"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
