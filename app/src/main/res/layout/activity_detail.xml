@@ -1,51 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".DetailActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailActivity"
     android:orientation="vertical">
-<TextView
+<include
+    android:id="@+id/PrimaryWeatherInfo"
+    layout="@layout/primary_weather_info"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    style="@style/TextAppearance.AppCompat.Large"
-    tools:text="Monday, November 25"
-    android:id="@+id/tv_weather_date" />
-    <TextView
+    android:layout_height="wrap_content"/>
+    <include
+        android:id="@+id/extra_details"
+        layout="@layout/extra_weather_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Large"
-        tools:text="Light Rain"
-        android:id="@+id/tv_weather_description" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Large"
-        tools:text="20"
-        android:id="@+id/tv_weather_max_temperature" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Large"
-        tools:text="10"
-        android:id="@+id/tv_weather_min_temperature" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Large"
-        tools:text="50%"
-        android:id="@+id/tv_weather_humidity" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Large"
-        tools:text="550 hPa"
-        android:id="@+id/tv_weather_pressure" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Large"
-        tools:text="4km/h NW"
-        android:id="@+id/tv_weather_Wind" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 </LinearLayout>
+</layout>
