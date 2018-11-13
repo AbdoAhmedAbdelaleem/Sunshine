@@ -107,7 +107,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         String maxTemp= mDetailBinding.PrimaryWeatherInfo.tvWeatherMaxTemperature.getText().toString();
         String minTemp= mDetailBinding.PrimaryWeatherInfo.tvWeatherMinTemperature.getText().toString();
         String weatherSummary = textViewWeatherDate + " - " +textViewWeatherDescription +
-                " - " + SunshineWeatherUtils.formatHighLows(this, toDouble(maxTemp), toDouble(minTemp));
+                " - " +maxTemp+" / "+minTemp;
         ShareCompat.IntentBuilder.from(this)
                 .setChooserTitle("Weather")
                 .setText(weatherSummary)
