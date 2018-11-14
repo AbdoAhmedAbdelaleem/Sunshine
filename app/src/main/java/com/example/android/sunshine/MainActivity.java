@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -34,6 +35,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.sunshine.Sync.SunshineSyncTask;
 import com.example.android.sunshine.Sync.SunshineSyncUtils;
 import com.example.android.sunshine.data.SunshineContract;
 import com.example.android.sunshine.data.SunshineFakeDateByUdacity;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     Cursor dataSource;
     android.support.v4.app.LoaderManager loaderManager;
     private static boolean PREFERENCES_HAVE_BEEN_UPDATED = false;
+    public static final int OPEN_MAP_INTENT_ID=148;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.progreesBar);
         loaderManager = getSupportLoaderManager();
         LoadWeatherData(MainActivity.this);
-        //getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI,null,null);
+      //  getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI,null,null);
         SunshineSyncUtils.initialize(this);
     }
 
@@ -107,9 +110,41 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.forcast, menu);
         return true;
     }
+    private void OpenMaplLocation()
+    {
+        String currentLocation = defaultSharedPreferences.getString(getString(R.string.LocationPreferenceKey),
+                getString(R.string.LocationPreferenceDefault));
+        Uri.Builder builder=new Uri.Builder();
+        Uri uri = builder.scheme("geo").encodedAuthority("0,0").appendQueryParameter("q", currentLocation).build();
+        Intent intent=new Intent(Intent.ACTION_VIEW,uri);
+        if(intent.resolveActivity(getPackageManager())!=null)
+        {
+            startActivityForResult(intent,OPEN_MAP_INTENT_ID);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode== OPEN_MAP_INTENT_ID)
+        {
+             if(resultCode == RESULT_OK){
+                String latitude=data.getStringExtra("latitude");
+                String longitude=data.getStringExtra("longitude");
+            } else if (resultCode == RESULT_CANCELED) {
+                //ActivityB was closed before you put any results
+            }
+//            SharedPreferences.Editor editor = defaultSharedPreferences.edit();
+//            editor.putString(getString(R.string.LocationPreferenceKey),)
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.mapLocationItem:
+                OpenMaplLocation();
+                return true;
             case R.id.SettingItem:
                 Intent intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
@@ -178,8 +213,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         PREFERENCES_HAVE_BEEN_UPDATED = true;
-       // LoadWeatherData(this);
-
+        if(key.equals(getString(R.string.LocationPreferenceKey))) {
+            getContentResolver().delete(SunshineContract.WeatherEntry.CONTENT_URI, null, null);
+            SunshineSyncUtils.sInitialized=false;
+            SunshineSyncUtils.initialize(this);
+        }
     }
 
     public void ShowNotification(View view) {

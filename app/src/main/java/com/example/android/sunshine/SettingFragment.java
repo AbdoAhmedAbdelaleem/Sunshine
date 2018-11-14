@@ -16,6 +16,7 @@ import com.example.android.sunshine.utilities.SunshineWeatherUtils;
 public class SettingFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     SharedPreferences screenSharedPreferences;
     PreferenceScreen preferenceScreen;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.seeting_prference);
@@ -24,8 +25,8 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
         screenSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         int preferenceCount = preferenceScreen.getPreferenceCount();
         for (int i = 0; i < preferenceCount; i++) {
-            if(!(preferenceScreen.getPreference(i) instanceof CheckBoxPreference))
-            setSummary(preferenceScreen.getPreference(i));
+            if (!(preferenceScreen.getPreference(i) instanceof CheckBoxPreference))
+                setSummary(preferenceScreen.getPreference(i));
         }
     }
 
@@ -34,16 +35,13 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
         super.onDestroy();
         screenSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
-    public void setSummary(Preference preference)
-    {
+
+    public void setSummary(Preference preference) {
         String key = preference.getKey();
         String storedData = screenSharedPreferences.getString(key, "");
-        if(preference instanceof EditTextPreference)
-        {
+        if (preference instanceof EditTextPreference) {
             preference.setSummary(storedData);
-        }
-        else if(preference instanceof ListPreference)
-        {
+        } else if (preference instanceof ListPreference) {
             preference.setSummary(storedData);
         }
     }
@@ -51,7 +49,9 @@ public class SettingFragment extends PreferenceFragmentCompat implements SharedP
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
-        setSummary(preference);
-        SunshineSyncUtils.StartImmediateSync(getContext());
+        if (preference != null) {
+            setSummary(preference);
+            SunshineSyncUtils.StartImmediateSync(getContext());
+        }
     }
 }

@@ -126,6 +126,7 @@
     <string name="condition_unknown">Unknown (<xliff:g id="conditionId">%1$d</xliff:g>)</string>
     <string name="RefreshButton">Refresh</string>
     <string name="SettingButton">Setting</string>
+    <string name="mapLocationLabel">Map Location</string>
     <string name="errorMessage">Error while Displaying this Page</string>
     <string name="LocationPreferenceKey" translatable="false">LocationPreferenceKey</string>
     <string name="LocationPreferenceTitle">Location</string>

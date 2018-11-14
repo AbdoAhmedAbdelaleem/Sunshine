@@ -53,7 +53,7 @@ public class SunshineSyncUtils
                 {
                     SunshineSyncUtils.StartImmediateSync(context);
                 }
-            }
+                }
         }.execute();
     }
     public static void StartImmediateSync(Context context) {
